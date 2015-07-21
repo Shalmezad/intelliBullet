@@ -41,6 +41,7 @@
 
 loop:	WAIT
 	IF FRAME AND 2 THEN GOSUB update_player
+	IF FRAME AND 10 THEN GOSUB update_bullets
 	GOTO loop
 
 	REM ------------------------------------
@@ -53,6 +54,16 @@ update_player:	PROCEDURE
 	IF cont1.up THEN IF Y>2 THEN Y=Y-1
 	IF cont1.down THEN IF Y<9 THEN Y=Y+1
 	GOSUB render_first_col
+	END
+
+update_bullets:	PROCEDURE
+	FOR A=0 TO 17
+		LINES(A)=LINES(A+1)
+	NEXT A
+	LINES(18) = RAND
+	
+	GOSUB render_first_col
+	GOSUB render_bullets
 	END
 
 	REM ------------------------------------
