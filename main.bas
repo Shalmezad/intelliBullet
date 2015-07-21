@@ -14,14 +14,16 @@
 	REM That way, we can use a single 8-bit variable to store the lines:
 	REM May consider using 16-bit if I have time for more bullet types
 	DIM LINES(19)
-  LINES(1)=&10010011
-
+	FOR A=0 TO 18
+		LINES(A)=&10010011
+	NEXT A
+  
 	REM ------------------------------------
 	REM            GAME LOOP 
 	REM ------------------------------------
 
 loop:	WAIT
-	IF FRAME AND 1 THEN GOSUB update
+	IF FRAME AND 2 THEN GOSUB update
 	GOSUB render
 	GOTO loop
 
@@ -44,17 +46,11 @@ update_player:	PROCEDURE
 	REM ------------------------------------
 
 render:	PROCEDURE
-	GOSUB clear_screen
+	CLS
 	GOSUB render_borders
 	GOSUB render_bullets
 	GOSUB render_player
 	GOSUB render_score
-	END
-
-clear_screen:	PROCEDURE
-	REM Let's see, 20x12 is...
-	REM 240
-	PRINT AT 0,"                                                                                                                                                                                                                                                "
 	END
 
 render_borders:	PROCEDURE
@@ -63,7 +59,16 @@ render_borders:	PROCEDURE
 	END
 
 render_bullets:	PROCEDURE
-  IF (LINES(1) AND &10000000) THEN PRINT AT 41, "*"
+	FOR A=0 TO 18
+	  IF (LINES(A) AND &10000000) THEN PRINT AT 40+20*0 + A + 1, "*"
+	  IF (LINES(A) AND &01000000) THEN PRINT AT 40+20*1 + A + 1, "*"
+	  IF (LINES(A) AND &00100000) THEN PRINT AT 40+20*2 + A + 1, "*"
+	  IF (LINES(A) AND &00010000) THEN PRINT AT 40+20*3 + A + 1, "*"
+	  IF (LINES(A) AND &00001000) THEN PRINT AT 40+20*4 + A + 1, "*"
+	  IF (LINES(A) AND &00000100) THEN PRINT AT 40+20*5 + A + 1, "*"
+	  IF (LINES(A) AND &00000010) THEN PRINT AT 40+20*6 + A + 1, "*"
+	  IF (LINES(A) AND &00000001) THEN PRINT AT 40+20*7 + A + 1, "*"
+	NEXT A
 	END
 
 render_score:	PROCEDURE
