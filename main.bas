@@ -10,8 +10,11 @@
 	Y = 2
 	REM Bullet lines:
 	REM So, the screen is 20x12
-	REM We're going to limit to 8 rows:
-
+	REM We're going to limit to 8 rows
+	REM That way, we can use a single 8-bit variable to store the lines:
+	REM May consider using 16-bit if I have time for more bullet types
+	DIM LINES(19)
+  LINES(1)=&10010011
 
 	REM ------------------------------------
 	REM            GAME LOOP 
@@ -43,6 +46,7 @@ update_player:	PROCEDURE
 render:	PROCEDURE
 	GOSUB clear_screen
 	GOSUB render_borders
+	GOSUB render_bullets
 	GOSUB render_player
 	GOSUB render_score
 	END
@@ -56,6 +60,10 @@ clear_screen:	PROCEDURE
 render_borders:	PROCEDURE
 	PRINT AT 20, "--------------------"
 	PRINT AT 200, "--------------------"
+	END
+
+render_bullets:	PROCEDURE
+  IF (LINES(1) AND &10000000) THEN PRINT AT 41, "*"
 	END
 
 render_score:	PROCEDURE
