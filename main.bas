@@ -13,10 +13,19 @@
 	REM We're going to limit to 8 rows
 	REM That way, we can use a single 8-bit variable to store the lines:
 	REM May consider using 16-bit if I have time for more bullet types
+	REM Temporarily using preset values to test parsing
 	DIM LINES(19)
-	FOR A=0 TO 18
+	FOR A=8 TO 18
 		LINES(A)=&10010011
 	NEXT A
+	LINES(0)=&11111111
+	LINES(1)=&00000000
+	LINES(2)=&10101010
+	LINES(3)=&01010101
+	LINES(4)=&10011001
+	LINES(5)=&00111100
+	LINES(6)=&01111110
+	LINES(7)=&11100111
   
 	REM ------------------------------------
 	REM            GAME LOOP 
