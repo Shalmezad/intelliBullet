@@ -18,49 +18,46 @@
 	FOR A=8 TO 18
 		LINES(A)=&10010011
 	NEXT A
-	LINES(0)=&11111111
-	LINES(1)=&00000000
+	LINES(0)=&00000000
+	LINES(1)=&11111111
 	LINES(2)=&10101010
 	LINES(3)=&01010101
 	LINES(4)=&10011001
 	LINES(5)=&00111100
 	LINES(6)=&01111110
 	LINES(7)=&11100111
+
+	REM ------------------------------------
+	REM            PRE RENDER
+	REM ------------------------------------
+	GOSUB render_borders
+	GOSUB render_bullets
+	GOSUB render_first_col
+	GOSUB render_score
   
 	REM ------------------------------------
 	REM            GAME LOOP 
 	REM ------------------------------------
 
 loop:	WAIT
-	IF FRAME AND 2 THEN GOSUB update
-	GOSUB render
+	IF FRAME AND 2 THEN GOSUB update_player
 	GOTO loop
 
 	REM ------------------------------------
 	REM           UPDATE METHODS
 	REM ------------------------------------
-update:	PROCEDURE
-	GOSUB update_player
-	END
 
 update_player:	PROCEDURE
 	REM Now the fun part....
 	REM If up, and we're not at the top, go up:
 	IF cont1.up THEN IF Y>2 THEN Y=Y-1
 	IF cont1.down THEN IF Y<9 THEN Y=Y+1
+	GOSUB render_first_col
 	END
 
 	REM ------------------------------------
 	REM           RENDER METHODS
 	REM ------------------------------------
-
-render:	PROCEDURE
-	CLS
-	GOSUB render_borders
-	GOSUB render_bullets
-	GOSUB render_player
-	GOSUB render_score
-	END
 
 render_borders:	PROCEDURE
 	PRINT AT 20, "--------------------"
@@ -68,15 +65,15 @@ render_borders:	PROCEDURE
 	END
 
 render_bullets:	PROCEDURE
-	FOR A=0 TO 18
-	  IF (LINES(A) AND &10000000) THEN PRINT AT 40+20*0 + A + 1, "*"
-	  IF (LINES(A) AND &01000000) THEN PRINT AT 40+20*1 + A + 1, "*"
-	  IF (LINES(A) AND &00100000) THEN PRINT AT 40+20*2 + A + 1, "*"
-	  IF (LINES(A) AND &00010000) THEN PRINT AT 40+20*3 + A + 1, "*"
-	  IF (LINES(A) AND &00001000) THEN PRINT AT 40+20*4 + A + 1, "*"
-	  IF (LINES(A) AND &00000100) THEN PRINT AT 40+20*5 + A + 1, "*"
-	  IF (LINES(A) AND &00000010) THEN PRINT AT 40+20*6 + A + 1, "*"
-	  IF (LINES(A) AND &00000001) THEN PRINT AT 40+20*7 + A + 1, "*"
+	FOR A=1 TO 18
+	  IF (LINES(A) AND &10000000)>0 THEN PRINT AT 40+20*0 + A , "*" ELSE PRINT AT 40+20*0+A, " "
+	  IF (LINES(A) AND &01000000)>0 THEN PRINT AT 40+20*1 + A , "*" ELSE PRINT AT 40+20*1+A, " "
+	  IF (LINES(A) AND &00100000)>0 THEN PRINT AT 40+20*2 + A , "*" ELSE PRINT AT 40+20*2+A, " "
+	  IF (LINES(A) AND &00010000)>0 THEN PRINT AT 40+20*3 + A , "*" ELSE PRINT AT 40+20*3+A, " "
+	  IF (LINES(A) AND &00001000)>0 THEN PRINT AT 40+20*4 + A , "*" ELSE PRINT AT 40+20*4+A, " "
+	  IF (LINES(A) AND &00000100)>0 THEN PRINT AT 40+20*5 + A , "*" ELSE PRINT AT 40+20*5+A, " "
+	  IF (LINES(A) AND &00000010)>0 THEN PRINT AT 40+20*6 + A , "*" ELSE PRINT AT 40+20*6+A, " "
+	  IF (LINES(A) AND &00000001)>0 THEN PRINT AT 40+20*7 + A , "*" ELSE PRINT AT 40+20*7+A, " "
 	NEXT A
 	END
 
@@ -84,8 +81,14 @@ render_score:	PROCEDURE
 	PRINT AT 0,"Score: 0"
 	END
 
-render_player:	PROCEDURE
-	REM Think I'm starting to get the hang of this
-	REM It's 20 characters wide, 12 tall
+render_first_col:	PROCEDURE
+	IF (LINES(0) AND &10000000)>0 THEN PRINT AT 40+20*0 , "*" ELSE PRINT AT 40+20*0 , " "
+	IF (LINES(0) AND &01000000)>0 THEN PRINT AT 40+20*1 , "*" ELSE PRINT AT 40+20*1 , " "
+	IF (LINES(0) AND &00100000)>0 THEN PRINT AT 40+20*2 , "*" ELSE PRINT AT 40+20*2 , " "
+	IF (LINES(0) AND &00010000)>0 THEN PRINT AT 40+20*3 , "*" ELSE PRINT AT 40+20*3 , " "
+	IF (LINES(0) AND &00001000)>0 THEN PRINT AT 40+20*4 , "*" ELSE PRINT AT 40+20*4 , " "
+	IF (LINES(0) AND &00000100)>0 THEN PRINT AT 40+20*5 , "*" ELSE PRINT AT 40+20*5 , " "
+	IF (LINES(0) AND &00000010)>0 THEN PRINT AT 40+20*6 , "*" ELSE PRINT AT 40+20*6 , " "
+	IF (LINES(0) AND &00000001)>0 THEN PRINT AT 40+20*7 , "*" ELSE PRINT AT 40+20*7 , " "
 	PRINT AT 20*Y COLOR 5,">"
 	END
