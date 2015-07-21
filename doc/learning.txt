@@ -1,0 +1,9 @@
+Alright, colors
+  0 is black
+  1 is blue
+  2 is orange
+  3 is white
+  4 is dark green
+  5 is green
+  6 is yellow
+  7 is white
