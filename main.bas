@@ -8,6 +8,8 @@
 	REM ------------------------------------
 	REM Player position
 	Y = 2
+	REM Score
+	#SCORE=0
 	REM Bullet lines:
 	REM So, the screen is 20x12
 	REM We're going to limit to 8 rows
@@ -15,17 +17,9 @@
 	REM May consider using 16-bit if I have time for more bullet types
 	REM Temporarily using preset values to test parsing
 	DIM LINES(19)
-	FOR A=8 TO 18
-		LINES(A)=&10010011
+	FOR A=0 TO 18
+		LINES(A)=&00000000
 	NEXT A
-	LINES(0)=&00000000
-	LINES(1)=&11111111
-	LINES(2)=&10101010
-	LINES(3)=&01010101
-	LINES(4)=&10011001
-	LINES(5)=&00111100
-	LINES(6)=&01111110
-	LINES(7)=&11100111
 
 	REM ------------------------------------
 	REM            PRE RENDER
@@ -41,7 +35,7 @@
 
 loop:	WAIT
 	IF FRAME AND 2 THEN GOSUB update_player
-	IF FRAME AND 10 THEN GOSUB update_bullets
+	IF FRAME % 8 = 0 THEN GOSUB update_bullets
 	GOTO loop
 
 	REM ------------------------------------
@@ -61,9 +55,11 @@ update_bullets:	PROCEDURE
 		LINES(A)=LINES(A+1)
 	NEXT A
 	LINES(18) = RAND
+	#SCORE = #SCORE + 1
 	
 	GOSUB render_first_col
 	GOSUB render_bullets
+	GOSUB render_score
 	END
 
 	REM ------------------------------------
@@ -89,7 +85,19 @@ render_bullets:	PROCEDURE
 	END
 
 render_score:	PROCEDURE
-	PRINT AT 0 COLOR 7,"Score: 0"
+	PRINT AT 0 COLOR 7,"Score: "
+  FOR A=0 TO 5
+    #PLACE=1
+    B=0
+    ' Had for B=0 TO A, but it always ran at least once. 
+    WHILE B< A
+      #PLACE = #PLACE * 10
+      B=B+1
+    WEND
+    ' So apparently, if you try printing a number, it prints based on a character chart. 
+    ' Hence the +16)*8+6. Makes more sense now.
+    PRINT AT 15-A, (#SCORE/#PLACE%10+16)*8+6
+  NEXT A
 	END
 
 render_first_col:	PROCEDURE
