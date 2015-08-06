@@ -13,6 +13,12 @@
 	FAKE_Y = 2
 	REM Score
 	#SCORE=0
+	REM Movement lock
+	REM Turns to 1 after rendering press
+	REM Turns to 0 if no press
+	REM Will lock movement until user releases both buttons:
+	MOVEMENT_LOCK=0
+
 	REM Bullet lines:
 	REM So, the screen is 20x12
 	REM We're going to limit to 8 rows
@@ -51,8 +57,10 @@ loop:	WAIT
 update_player:	PROCEDURE
 	REM Now the fun part....
 	REM If up, and we're not at the top, go up:
-	IF cont1.up THEN IF Y>2 THEN Y=Y-1
-	IF cont1.down THEN IF Y<9 THEN Y=Y+1
+	IF cont1.up AND (NOT MOVEMENT_LOCK) THEN IF Y>2 THEN Y=Y-1
+	IF cont1.down AND (NOT MOVEMENT_LOCK) THEN IF Y<9 THEN Y=Y+1
+	REM Adjust the movement lock based on input:
+	MOVEMENT_LOCK = cont1.up OR cont1.down
 	GOSUB render_first_col
 	END
 
