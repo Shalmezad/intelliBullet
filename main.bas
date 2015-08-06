@@ -8,6 +8,9 @@
 	REM ------------------------------------
 	REM Player position
 	Y = 2
+	REM Fake ship position
+	REM This is a variable to help guarantee a path for the player:
+	FAKE_Y = 2
 	REM Score
 	#SCORE=0
 	REM Bullet lines:
@@ -17,7 +20,7 @@
 	REM May consider using 16-bit if I have time for more bullet types
 	REM Temporarily using preset values to test parsing
 	DIM LINES(19)
-	FOR A=0 TO 18
+	FOR A=0 TO 19
 		LINES(A)=&00000000
 	NEXT A
 	REM # of lives
@@ -38,7 +41,7 @@
 
 loop:	WAIT
 	IF FRAME AND 2 THEN GOSUB update_player
-	IF FRAME % 8 = 0 THEN GOSUB update_bullets
+	IF FRAME % 28 = 0 THEN GOSUB update_bullets
 	GOTO loop
 
 	REM ------------------------------------
@@ -54,11 +57,36 @@ update_player:	PROCEDURE
 	END
 
 update_bullets:	PROCEDURE
-	FOR A=0 TO 17
+	REM Shift all the lines
+	FOR A=0 TO 18
 		LINES(A)=LINES(A+1)
 	NEXT A
-	LINES(18) = RAND
+	REM Generate a new line
+	LINES(19) = RAND AND (RAND XOR LINES(16))
+	REM Add 1 to the score
 	#SCORE = #SCORE + 1
+	REM Make our fake player position empty:
+	IF FAKE_Y = 2 THEN LINES(19)=(LINES(19) AND &01111111)
+	IF FAKE_Y = 3 THEN LINES(19)=(LINES(19) AND &10111111)
+	IF FAKE_Y = 4 THEN LINES(19)=(LINES(19) AND &11011111)
+	IF FAKE_Y = 5 THEN LINES(19)=(LINES(19) AND &11101111)
+	IF FAKE_Y = 6 THEN LINES(19)=(LINES(19) AND &11110111)
+	IF FAKE_Y = 7 THEN LINES(19)=(LINES(19) AND &11111011)
+	IF FAKE_Y = 8 THEN LINES(19)=(LINES(19) AND &11111101)
+	IF FAKE_Y = 9 THEN LINES(19)=(LINES(19) AND &11111110)
+	REM Adjust our fake player (necessary to guarantee path)
+	FAKE_SHIFT = RAND
+	IF (FAKE_SHIFT AND &10000000)>0 THEN IF FAKE_Y > 2 THEN FAKE_Y=FAKE_Y-1
+	IF (FAKE_SHIFT AND &01000000)>0 THEN IF FAKE_Y < 9 THEN FAKE_Y=FAKE_Y+1
+	REM Make our fake player position empty:
+	IF FAKE_Y = 2 THEN LINES(19)=(LINES(19) AND &01111111)
+	IF FAKE_Y = 3 THEN LINES(19)=(LINES(19) AND &10111111)
+	IF FAKE_Y = 4 THEN LINES(19)=(LINES(19) AND &11011111)
+	IF FAKE_Y = 5 THEN LINES(19)=(LINES(19) AND &11101111)
+	IF FAKE_Y = 6 THEN LINES(19)=(LINES(19) AND &11110111)
+	IF FAKE_Y = 7 THEN LINES(19)=(LINES(19) AND &11111011)
+	IF FAKE_Y = 8 THEN LINES(19)=(LINES(19) AND &11111101)
+	IF FAKE_Y = 9 THEN LINES(19)=(LINES(19) AND &11111110)
 	
 	GOSUB render_first_col
 	GOSUB render_bullets
@@ -76,12 +104,12 @@ render_lives:	PROCEDURE
 	END
 
 render_borders:	PROCEDURE
-	PRINT AT 20 COLOR 7, "--------------------"
-	PRINT AT 200 COLOR 7, "--------------------"
+	PRINT AT 20 COLOR 3, "--------------------"
+	PRINT AT 200 COLOR 3, "--------------------"
 	END
 
 render_bullets:	PROCEDURE
-	FOR A=1 TO 18
+	FOR A=1 TO 19
 	  IF (LINES(A) AND &10000000)>0 THEN PRINT AT 40+20*0 + A COLOR 2, "*" ELSE PRINT AT 40+20*0+A, " "
 	  IF (LINES(A) AND &01000000)>0 THEN PRINT AT 40+20*1 + A COLOR 2, "*" ELSE PRINT AT 40+20*1+A, " "
 	  IF (LINES(A) AND &00100000)>0 THEN PRINT AT 40+20*2 + A COLOR 2, "*" ELSE PRINT AT 40+20*2+A, " "
@@ -91,10 +119,12 @@ render_bullets:	PROCEDURE
 	  IF (LINES(A) AND &00000010)>0 THEN PRINT AT 40+20*6 + A COLOR 2, "*" ELSE PRINT AT 40+20*6+A, " "
 	  IF (LINES(A) AND &00000001)>0 THEN PRINT AT 40+20*7 + A COLOR 2, "*" ELSE PRINT AT 40+20*7+A, " "
 	NEXT A
+
+	PRINT AT 19+20*FAKE_Y     COLOR 6, "<"
 	END
 
 render_score:	PROCEDURE
-	PRINT AT 0 COLOR 7,"Score: "
+	PRINT AT 0 COLOR 3,"Score: "
   FOR A=0 TO 5
     #PLACE=1
     B=0
