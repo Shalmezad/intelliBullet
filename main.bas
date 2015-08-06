@@ -20,6 +20,8 @@
 	FOR A=0 TO 18
 		LINES(A)=&00000000
 	NEXT A
+	REM # of lives
+	LIVES=3
 
 	REM ------------------------------------
 	REM            PRE RENDER
@@ -28,6 +30,7 @@
 	GOSUB render_bullets
 	GOSUB render_first_col
 	GOSUB render_score
+	GOSUB render_lives
   
 	REM ------------------------------------
 	REM            GAME LOOP 
@@ -65,6 +68,12 @@ update_bullets:	PROCEDURE
 	REM ------------------------------------
 	REM           RENDER METHODS
 	REM ------------------------------------
+render_lives:	PROCEDURE
+	PRINT AT 221 COLOR 3, "LIVES:       "
+	FOR A=1 TO LIVES
+		PRINT AT 227+A COLOR 3, ">"
+	NEXT A
+	END
 
 render_borders:	PROCEDURE
 	PRINT AT 20 COLOR 7, "--------------------"
@@ -112,4 +121,5 @@ render_first_col:	PROCEDURE
 	PRINT AT 20*(Y-1) COLOR 5, "\97"
 	PRINT AT 20*Y     COLOR 6, ">"
 	PRINT AT 20*(Y+1) COLOR 5, "\99"
+	GOSUB render_borders
 	END
