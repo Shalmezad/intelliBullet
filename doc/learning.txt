@@ -7,3 +7,14 @@ Alright, colors
   5 is green
   6 is yellow
   7 is white
+
+
+Text:
+	Chart here is very helpful:
+	http://wiki.intellivision.us/index.php?title=Graphics_ROM&oldid=14925
+
+	The giant square starts at \95. Count from there
+
+	As for printing, it's:
+	PRINT AT SOMEPOSITION "\95"
+	Replacing 95 with whatever code you want
