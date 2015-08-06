@@ -54,6 +54,32 @@ loop:	WAIT
 	REM           UPDATE METHODS
 	REM ------------------------------------
 
+REM Checks collision between the main bullet line and the player
+check_collision:	PROCEDURE
+	COLLISION=0
+	IF Y = 2 THEN COLLISION=(LINES(0) AND &10000000)
+	IF Y = 3 THEN COLLISION=(LINES(0) AND &01000000)
+	IF Y = 4 THEN COLLISION=(LINES(0) AND &00100000)
+	IF Y = 5 THEN COLLISION=(LINES(0) AND &00010000)
+	IF Y = 6 THEN COLLISION=(LINES(0) AND &00001000)
+	IF Y = 7 THEN COLLISION=(LINES(0) AND &00000100)
+	IF Y = 8 THEN COLLISION=(LINES(0) AND &00000010)
+	IF Y = 9 THEN COLLISION=(LINES(0) AND &00000001)
+	IF ((COLLISION > 0) AND (LIVES > 0)) THEN GOSUB kill_player
+	END
+
+REM Player was hit, take a life
+kill_player:	PROCEDURE
+	LIVES = LIVES - 1
+	FOR A=0 TO 19
+		LINES(A)=&00000000
+	NEXT A
+
+	GOSUB render_bullets
+	GOSUB render_lives
+
+	END
+
 update_player:	PROCEDURE
 	REM Now the fun part....
 	REM If up, and we're not at the top, go up:
@@ -61,6 +87,7 @@ update_player:	PROCEDURE
 	IF cont1.down AND (NOT MOVEMENT_LOCK) THEN IF Y<9 THEN Y=Y+1
 	REM Adjust the movement lock based on input:
 	MOVEMENT_LOCK = cont1.up OR cont1.down
+	GOSUB check_collision
 	GOSUB render_first_col
 	END
 
@@ -72,7 +99,7 @@ update_bullets:	PROCEDURE
 	REM Generate a new line
 	LINES(19) = RAND AND (RAND XOR LINES(16))
 	REM Add 1 to the score
-	#SCORE = #SCORE + 1
+	IF LIVES > 0 THEN #SCORE = #SCORE + 1
 	REM Make our fake player position empty:
 	IF FAKE_Y = 2 THEN LINES(19)=(LINES(19) AND &01111111)
 	IF FAKE_Y = 3 THEN LINES(19)=(LINES(19) AND &10111111)
@@ -95,7 +122,7 @@ update_bullets:	PROCEDURE
 	IF FAKE_Y = 7 THEN LINES(19)=(LINES(19) AND &11111011)
 	IF FAKE_Y = 8 THEN LINES(19)=(LINES(19) AND &11111101)
 	IF FAKE_Y = 9 THEN LINES(19)=(LINES(19) AND &11111110)
-	
+	GOSUB check_collision
 	GOSUB render_first_col
 	GOSUB render_bullets
 	GOSUB render_score
@@ -105,10 +132,11 @@ update_bullets:	PROCEDURE
 	REM           RENDER METHODS
 	REM ------------------------------------
 render_lives:	PROCEDURE
-	PRINT AT 221 COLOR 3, "LIVES:       "
+	PRINT AT 221 COLOR 3, "LIVES:           "
 	FOR A=1 TO LIVES
 		PRINT AT 227+A COLOR 3, ">"
 	NEXT A
+	IF LIVES=0 THEN PRINT AT 221 COLOR 3, "GAME OVER        "
 	END
 
 render_borders:	PROCEDURE
@@ -157,7 +185,7 @@ render_first_col:	PROCEDURE
 	IF (LINES(0) AND &00000010)>0 THEN PRINT AT 40+20*6 COLOR 2, "*" ELSE PRINT AT 40+20*6 , " "
 	IF (LINES(0) AND &00000001)>0 THEN PRINT AT 40+20*7 COLOR 2, "*" ELSE PRINT AT 40+20*7 , " "
 	'PRINT AT 20*(Y-1) COLOR 5, "\97"
-	PRINT AT 20*Y     COLOR 6, ">"
+	IF (LIVES > 0) THEN PRINT AT 20*Y     COLOR 6, ">"
 	'PRINT AT 20*(Y+1) COLOR 5, "\99"
 	'GOSUB render_borders
 	END
