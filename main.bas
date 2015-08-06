@@ -47,7 +47,7 @@
 
 loop:	WAIT
 	IF (FRAME AND 2) AND LIVES>0 THEN GOSUB update_player
-	IF FRAME % 28 = 0 THEN GOSUB update_bullets
+	IF FRAME % 18 = 0 THEN GOSUB update_bullets
 	GOTO loop
 
 	REM ------------------------------------
