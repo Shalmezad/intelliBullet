@@ -46,7 +46,7 @@
 	REM ------------------------------------
 
 loop:	WAIT
-	IF FRAME AND 2 THEN GOSUB update_player
+	IF (FRAME AND 2) AND LIVES>0 THEN GOSUB update_player
 	IF FRAME % 28 = 0 THEN GOSUB update_bullets
 	GOTO loop
 
@@ -156,8 +156,8 @@ render_first_col:	PROCEDURE
 	IF (LINES(0) AND &00000100)>0 THEN PRINT AT 40+20*5 COLOR 2, "*" ELSE PRINT AT 40+20*5 , " "
 	IF (LINES(0) AND &00000010)>0 THEN PRINT AT 40+20*6 COLOR 2, "*" ELSE PRINT AT 40+20*6 , " "
 	IF (LINES(0) AND &00000001)>0 THEN PRINT AT 40+20*7 COLOR 2, "*" ELSE PRINT AT 40+20*7 , " "
-	PRINT AT 20*(Y-1) COLOR 5, "\97"
+	'PRINT AT 20*(Y-1) COLOR 5, "\97"
 	PRINT AT 20*Y     COLOR 6, ">"
-	PRINT AT 20*(Y+1) COLOR 5, "\99"
-	GOSUB render_borders
+	'PRINT AT 20*(Y+1) COLOR 5, "\99"
+	'GOSUB render_borders
 	END
