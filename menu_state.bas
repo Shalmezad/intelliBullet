@@ -1,12 +1,13 @@
-FLASH_TICK=40
 	REM ------------------------------------
 	REM             STATE INIT 
 	REM ------------------------------------
 menu_state_init:	PROCEDURE
+	FLASH_TICK=80
 	GOSUB menu_state_prerender
 	END
 
 menu_state_prerender:	PROCEDURE
+	CLS
 	GOSUB render_menu
 	END
 
@@ -26,6 +27,6 @@ render_flash_text:	PROCEDURE
 	IF FLASH_TICK <= 0 THEN FLASH_TICK = 40
 	IF FLASH_TICK > 20 THEN PRINT AT 100 COLOR 3, "                    "
 	IF FLASH_TICK <=20 THEN PRINT AT 100 COLOR 3, "    Press Button    "
-	IF cont1.button THEN CURRENT_STATE=PRE_GAME_STATE
+	IF FLASH_TICK <= 40 AND cont1.button THEN CURRENT_STATE=PRE_GAME_STATE
 	END
 
