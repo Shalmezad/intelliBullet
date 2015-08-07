@@ -1,7 +1,7 @@
-
 	REM ------------------------------------
-	REM           GLOBAL VARIABLES 
+	REM             STATE INIT 
 	REM ------------------------------------
+game_state_init:	PROCEDURE
 	REM Player position
 	Y = 2
 	REM Fake ship position
@@ -28,23 +28,16 @@
 	REM # of lives
 	LIVES=3
 
-	REM ------------------------------------
-	REM            PRE RENDER
-	REM ------------------------------------
+	GOSUB game_state_prerender
+	END
+
+game_state_prerender:	PROCEDURE
 	GOSUB render_borders
 	GOSUB render_bullets
 	GOSUB render_first_col
 	GOSUB render_score
 	GOSUB render_lives
-  
-	REM ------------------------------------
-	REM            GAME LOOP 
-	REM ------------------------------------
-
-loop:	WAIT
-	IF (FRAME AND 2) AND LIVES>0 THEN GOSUB update_player
-	IF FRAME % 18 = 0 THEN GOSUB update_bullets
-	GOTO loop
+	END
 
 	REM ------------------------------------
 	REM           UPDATE METHODS
