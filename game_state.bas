@@ -72,13 +72,14 @@ kill_player:	PROCEDURE
 
 update_player:	PROCEDURE
 	REM Now the fun part....
+	OLD_Y = Y
 	REM If up, and we're not at the top, go up:
 	IF cont1.up AND (NOT MOVEMENT_LOCK) THEN IF Y>2 THEN Y=Y-1
 	IF cont1.down AND (NOT MOVEMENT_LOCK) THEN IF Y<9 THEN Y=Y+1
 	REM Adjust the movement lock based on input:
 	MOVEMENT_LOCK = cont1.up OR cont1.down
-	GOSUB check_collision
-	GOSUB render_player_col
+	IF NOT (Y = OLD_Y) THEN GOSUB check_collision
+	IF NOT (Y = OLD_Y) THEN GOSUB render_player_col
 	END
 
 update_bullets:	PROCEDURE
@@ -113,8 +114,8 @@ update_bullets:	PROCEDURE
 	IF FAKE_Y = 8 THEN LINES(19)=(LINES(19) AND &11111101)
 	IF FAKE_Y = 9 THEN LINES(19)=(LINES(19) AND &11111110)
 	GOSUB check_collision
-	GOSUB render_player_col
 	GOSUB render_bullets
+	GOSUB render_player_col
 	GOSUB render_score
 	END
 
