@@ -15,19 +15,23 @@ ROM_NAME=$(GAME_NAME).rom
 
 default: $(EXPORT_DIRECTORY)/$(ROM_NAME)
 
+#Generate .rom
 $(EXPORT_DIRECTORY)/$(ROM_NAME): $(EXPORT_DIRECTORY)/$(BIN_NAME)
 	$(JZINTV_PATH)/bin/bin2rom $(EXPORT_DIRECTORY)/$(BIN_NAME)
 
+#Generate .bin
 $(EXPORT_DIRECTORY)/$(BIN_NAME): intermediate/intermediate.asm
 	mkdir -p $(EXPORT_DIRECTORY) 
 	$(AS1600_ASSEMBLER) -o $(EXPORT_DIRECTORY)/$(BIN_NAME) -l $(EXPORT_DIRECTORY)/$(LST_NAME) intermediate/intermediate.asm
 
+#Generate the intermediate .asm
 intermediate/intermediate.asm: $(SOURCE_NAME) *.bas
 	mkdir -p intermediate
 	cp $(INTYBASIC_PATH)/intybasic_*.asm ./
 	$(INTYBASIC_PARSER) $(SOURCE_NAME) intermediate/intermediate.asm
 	rm intybasic_*.asm
 
+#Run the game on JZINTV
 run:
 	$(JZINTV_EMULATOR) $(EXPORT_DIRECTORY)/$(BIN_NAME)
 
