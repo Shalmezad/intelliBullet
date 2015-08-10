@@ -2,6 +2,17 @@
 	REM Intellivision bullet hell
 	REM Create by Shalmezad
 	REM
+ 
+	REM ------------------------------------
+	REM            GAME CONFIGURATION 
+	REM ------------------------------------
+	REM Adjust these to change the game:
+
+	REM How many frames until the bullets move
+	REM NOTE: If I add difficulty, this will no longer be a constant
+CONST BULLET_UPDATE_DELAY=18 
+
+
 
 	REM Set up state variables
 CONST PRE_MENU_STATE=0
@@ -25,7 +36,7 @@ loop:	WAIT
 	IF (CURRENT_STATE=PRE_GAME_STATE) THEN CURRENT_STATE=GAME_STATE
 	'Game state
 	IF (CURRENT_STATE=GAME_STATE) AND (FRAME AND 2) AND LIVES>0 THEN GOSUB update_player
-	IF (CURRENT_STATE=GAME_STATE) AND FRAME % 18 = 0 THEN GOSUB update_bullets
+	IF (CURRENT_STATE=GAME_STATE) AND FRAME % BULLET_UPDATE_DELAY = 0 THEN GOSUB update_bullets
 	IF (CURRENT_STATE=GAME_STATE) AND (LIVES=0) AND cont1.button THEN CURRENT_STATE=PRE_MENU_STATE
 	GOTO loop
 
