@@ -28,3 +28,4 @@ run:
 clean:
 	rm -rf $(EXPORT_DIRECTORY)
 	rm -rf intermediate
+	rm -rf dump.*
