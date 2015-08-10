@@ -13,18 +13,19 @@ LST_NAME=$(GAME_NAME).lst
 BIN_NAME=$(GAME_NAME).bin
 ROM_NAME=$(GAME_NAME).rom
 
-build:
-	mkdir -p intermediate
-	mkdir -p $(EXPORT_DIRECTORY) 
-	#Copy in prologue/epilogue temporarily
-	cp $(INTYBASIC_PATH)/intybasic_*.asm ./
-	#Run intybasic:
-	$(INTYBASIC_PARSER) $(SOURCE_NAME) intermediate/intermediate.asm
-	#Run AS1600
-	$(AS1600_ASSEMBLER) -o $(EXPORT_DIRECTORY)/$(BIN_NAME) -l $(EXPORT_DIRECTORY)/$(LST_NAME) intermediate/intermediate.asm
-	#Generate a rom as well:
+default: $(EXPORT_DIRECTORY)/$(ROM_NAME)
+
+$(EXPORT_DIRECTORY)/$(ROM_NAME): $(EXPORT_DIRECTORY)/$(BIN_NAME)
 	$(JZINTV_PATH)/bin/bin2rom $(EXPORT_DIRECTORY)/$(BIN_NAME)
-	#Clean up
+
+$(EXPORT_DIRECTORY)/$(BIN_NAME): intermediate/intermediate.asm
+	mkdir -p $(EXPORT_DIRECTORY) 
+	$(AS1600_ASSEMBLER) -o $(EXPORT_DIRECTORY)/$(BIN_NAME) -l $(EXPORT_DIRECTORY)/$(LST_NAME) intermediate/intermediate.asm
+
+intermediate/intermediate.asm: $(SOURCE_NAME) *.bas
+	mkdir -p intermediate
+	cp $(INTYBASIC_PATH)/intybasic_*.asm ./
+	$(INTYBASIC_PARSER) $(SOURCE_NAME) intermediate/intermediate.asm
 	rm intybasic_*.asm
 
 run:
@@ -34,3 +35,4 @@ clean:
 	rm -rf $(EXPORT_DIRECTORY)
 	rm -rf intermediate
 	rm -rf dump.*
+	rm -rf intybasic_*.asm
