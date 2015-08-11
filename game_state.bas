@@ -5,6 +5,10 @@ game_state_init:	PROCEDURE
 	REM Player position
 	X = 2
 	Y = 2
+	REM Player's last position
+	REM Necessary for rerendering where they were:
+	OLD_X = 2
+	OLD_Y = 2
 	REM Fake ship position
 	REM This is a variable to help guarantee a path for the player:
 	FAKE_Y = 2
@@ -75,9 +79,15 @@ update_player:	PROCEDURE
 	OLD_Y = Y
 	REM If up, and we're not at the top, go up:
 	IF cont1.up AND (NOT MOVEMENT_LOCK) THEN IF Y>2 THEN Y=Y-1
+	REM If down, and we're not at the bottom, go down:
 	IF cont1.down AND (NOT MOVEMENT_LOCK) THEN IF Y<9 THEN Y=Y+1
+	REM If left, and we're not at the left-most, go left:
+	IF cont1.left AND (NOT MOVEMENT_LOCK) THEN IF X > 0 THEN X=X-1
+	REM If right, and we're not at the right-most, go right:
+	IF cont1.right AND (NOT MOVEMENT_LOCK) THEN IF X < 17 THEN X=X+1
+
 	REM Adjust the movement lock based on input:
-	MOVEMENT_LOCK = cont1.up OR cont1.down
+	MOVEMENT_LOCK = cont1.up OR cont1.down OR cont1.left OR cont1.right
 	IF NOT (Y = OLD_Y) THEN GOSUB check_collision
 	IF NOT (Y = OLD_Y) THEN GOSUB render_player_col
 	END
