@@ -1,5 +1,5 @@
 JZINTV_PATH=/home/shalmezad/Programs/jzintv
-INTYBASIC_PATH=/home/shalmezad/Programs/IntyBasic1_1_0
+INTYBASIC_PATH=/home/shalmezad/Programs/IntyBasic1_2_0
 
 INTYBASIC_PARSER=$(INTYBASIC_PATH)/intybasic_linux
 AS1600_ASSEMBLER=$(JZINTV_PATH)/bin/as1600
