@@ -40,7 +40,7 @@ game_state_init:	PROCEDURE
 game_state_prerender:	PROCEDURE
 	GOSUB render_borders
 	GOSUB render_bullets
-	GOSUB render_player_col
+	'Rendering bullets renders the line the player's on. No need to call render_player_col
 	GOSUB render_score
 	GOSUB render_lives
 	END
@@ -117,8 +117,8 @@ update_bullets:	PROCEDURE
 		BITMASK = BITMASK / 2
 	NEXT B
 	GOSUB check_collision
-	GOSUB render_bullets
-	GOSUB render_player_col
+	GOSUB render_bullets 
+	'Rendering bullets will also render the line the player's on. No need to check that
 	GOSUB render_score
 	END
 
@@ -140,11 +140,8 @@ render_borders:	PROCEDURE
 
 render_bullets:	PROCEDURE
 	FOR A=1 TO 19
-		BITMASK=&10000000
-		FOR B=0 TO 7
-			IF (LINES(A) AND BITMASK)>0 THEN PRINT AT bulletPos(A,B) COLOR 2, "*" ELSE PRINT AT bulletPos(A,B), " "
-			BITMASK = BITMASK / 2
-		NEXT B
+		RENDER_LINE_PARAM_X = A
+		GOSUB render_line
 	NEXT A
 
 	PRINT AT 19+20*FAKE_Y     COLOR 6, "<"
@@ -166,14 +163,20 @@ render_score:	PROCEDURE
   NEXT A
 	END
 
-render_player_col:	PROCEDURE
+REM NOTE: Set "RENDER_LINE_PARAM_X" before calling!
+REM This method draws everything for a single line. Bullets, player, etc
+render_line: PROCEDURE
 	BITMASK=&10000000
 	FOR B=0 TO 7
-		IF (LINES(X) AND BITMASK)>0 THEN PRINT AT bulletPos(X,B) COLOR 2, "*" ELSE PRINT AT 40+20*B+X , " "
+		IF (LINES(RENDER_LINE_PARAM_X) AND BITMASK)>0 THEN PRINT AT bulletPos(RENDER_LINE_PARAM_X,B) COLOR 2, "*" ELSE PRINT AT bulletPos(RENDER_LINE_PARAM_X,B) , " "
 		BITMASK = BITMASK / 2
 	NEXT B
 	'PRINT AT 20*(Y-1) COLOR 5, "\97"
-	IF (LIVES > 0) THEN PRINT AT 20*Y+X     COLOR 6, ">"
-	'PRINT AT 20*(Y+1) COLOR 5, "\99"
-	'GOSUB render_borders
+	IF (X=RENDER_LINE_PARAM_X) AND (LIVES > 0) THEN PRINT AT 20*Y+RENDER_LINE_PARAM_X     COLOR 6, ">"
+
+	END
+
+render_player_col:	PROCEDURE
+	RENDER_LINE_PARAM_X = X
+	GOSUB render_line
 	END
