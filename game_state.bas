@@ -96,7 +96,8 @@ update_bullets:	PROCEDURE
 		LINES(A)=LINES(A+1)
 	NEXT A
 	REM Generate a new line
-	LINES(19) = RAND AND (RAND XOR LINES(16))
+	' LINES(19) = RAND AND (RAND XOR LINES(16))
+	LINES(19) = RAND AND (NOT LINES(16))
 	REM Add 1 to the score
 	IF LIVES > 0 THEN #SCORE = #SCORE + 1
 	REM Make our fake player position empty:
