@@ -1,12 +1,12 @@
 Alright, colors
-  0 is black
-  1 is blue
-  2 is orange
-  3 is white
-  4 is dark green
-  5 is green
-  6 is yellow
-  7 is white
+  0 is black - acording to docs: black
+  1 is blue - acording to docs: blue
+  2 is orange - acording to docs: red
+  3 is white - acording to docs: tan
+  4 is dark green - acording to docs: dark green
+  5 is green - acording to docs: green
+  6 is yellow - acording to docs: yellow
+  7 is white - acording to docs: white
 
 
 Text:
@@ -18,3 +18,34 @@ Text:
 	As for printing, it's:
 	PRINT AT SOMEPOSITION "\95"
 	Replacing 95 with whatever code you want
+
+Game graphics:
+	It's 20x12
+	I already decided on 8 bullet rows, leaving 4 rows for GUI/borders.
+	So, screen is something like:
+____________________
+____________________
+********************
+********************
+********************
+********************
+********************
+********************
+********************
+********************
+____________________
+____________________
+Now, let's get a little fancier with the GUI:
+---\SCORE  00000/---
+    \__________/    
+********************
+********************
+********************
+********************
+********************
+********************
+********************
+********************
+-----\        /-----
+L >>> \------/ S ooo
+
