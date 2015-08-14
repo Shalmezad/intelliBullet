@@ -152,8 +152,9 @@ render_lives:	PROCEDURE
 	END
 
 render_borders:	PROCEDURE
-	PRINT AT 20 COLOR 3, "--------------------"
-	PRINT AT 200 COLOR 3, "--------------------"
+	PRINT AT 0  COLOR 3, "\205\205\205\181            \180\205\205\205"
+	PRINT AT 20 COLOR 3,  "    \183\206\206\206\206\206\206\206\206\206\206\182    "
+	PRINT AT 200 COLOR 3, "\205\205\205\205\205\181        \180\205\205\205\205\205"
 	END
 
 render_bullets:	PROCEDURE
@@ -166,7 +167,7 @@ render_bullets:	PROCEDURE
 	END
 
 render_score:	PROCEDURE
-	PRINT AT 0 COLOR 3,"Score: "
+	PRINT AT 5 COLOR 3,"Score  "
   FOR A=0 TO 5
     #PLACE=1
     B=0
