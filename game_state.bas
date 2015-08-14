@@ -23,6 +23,9 @@ game_state_init:	PROCEDURE
 	REM Bullet update delay
 	REM How long before updating the bullets:
 	BULLET_UPDATE_DELAY=STARTING_BULLET_UPDATE_DELAY
+	REM Bullet color
+	REM What color the bullets will be. Changes whenever difficulty ramps up
+	BULLET_COLOR = 4
 
 	REM Bullet lines:
 	REM So, the screen is 20x12
@@ -111,6 +114,7 @@ update_bullets:	PROCEDURE
 				BULLET_UPDATE_DELAY = BULLET_UPDATE_DELAY-1
 			END IF
 			'change the bullet color too
+			IF BULLET_COLOR = 4 THEN BULLET_COLOR = 5 ELSE IF BULLET_COLOR = 5 THEN BULLET_COLOR=4
 		END IF
 	END IF
 	REM Make our fake player position empty:
@@ -182,7 +186,7 @@ REM This method draws everything for a single line. Bullets, player, etc
 render_line: PROCEDURE
 	BITMASK=&10000000
 	FOR B=0 TO 7
-		IF (LINES(RENDER_LINE_PARAM_X) AND BITMASK)>0 THEN PRINT AT bulletPos(RENDER_LINE_PARAM_X,B) COLOR 2, "*" ELSE PRINT AT bulletPos(RENDER_LINE_PARAM_X,B) , " "
+		IF (LINES(RENDER_LINE_PARAM_X) AND BITMASK)>0 THEN PRINT AT bulletPos(RENDER_LINE_PARAM_X,B) COLOR BULLET_COLOR, "*" ELSE PRINT AT bulletPos(RENDER_LINE_PARAM_X,B) , " "
 		BITMASK = BITMASK / 2
 	NEXT B
 	'PRINT AT 20*(Y-1) COLOR 5, "\97"
