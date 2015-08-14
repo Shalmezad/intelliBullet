@@ -9,9 +9,19 @@
 	REM Adjust these to change the game:
 
 	REM How many frames until the bullets move
-	REM NOTE: If I add difficulty, this will no longer be a constant
-CONST BULLET_UPDATE_DELAY=18 
-
+	REM Starting bullet update delay
+CONST STARTING_BULLET_UPDATE_DELAY=20
+	REM Ending bullet update delay
+	REM AKA: the fastest the game will go:
+CONST ENDING_BULLET_UPDATE_DELAY=4
+	REM How many points until delay changes
+CONST BULLET_SPEED_CHANGE_POINTS=20
+	REM Current bullet update delay
+	REM No longer a constant
+BULLET_UPDATE_DELAY=STARTING_BULLET_UPDATE_DELAY 
+	REM Counter for the bullets.
+	REM Once it's above the update delay, switch
+BULLET_TICK=0
 
 
 	REM Set up state variables
@@ -45,9 +55,14 @@ loop:	WAIT
 		IF (FRAME AND 2) AND LIVES > 0 THEN
 			GOSUB update_player
 		END IF
-		IF (FRAME % BULLET_UPDATE_DELAY = 0) THEN
+		BULLET_TICK = BULLET_TICK + 1
+		IF BULLET_TICK > BULLET_UPDATE_DELAY THEN
 			GOSUB update_bullets
+			BULLEt_TICK=0
 		END IF
+		' IF (FRAME % BULLET_UPDATE_DELAY = 0) THEN
+		' GOSUB update_bullets
+		' END IF
 		IF (LIVES=0) AND cont1.button THEN
 			CURRENT_STATE=PRE_MENU_STATE
 		END IF

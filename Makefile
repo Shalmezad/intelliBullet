@@ -33,7 +33,7 @@ intermediate/intermediate.asm: $(SOURCE_NAME) *.bas
 
 #Run the game on JZINTV
 run:
-	$(JZINTV_EMULATOR) $(EXPORT_DIRECTORY)/$(BIN_NAME)
+	$(JZINTV_EMULATOR) --displaysize=3 $(EXPORT_DIRECTORY)/$(BIN_NAME)
 
 clean:
 	rm -rf $(EXPORT_DIRECTORY)

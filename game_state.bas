@@ -20,6 +20,9 @@ game_state_init:	PROCEDURE
 	REM Turns to 0 if no press
 	REM Will lock movement until user releases both buttons:
 	MOVEMENT_LOCK=0
+	REM Bullet update delay
+	REM How long before updating the bullets:
+	BULLET_UPDATE_DELAY=STARTING_BULLET_UPDATE_DELAY
 
 	REM Bullet lines:
 	REM So, the screen is 20x12
@@ -80,7 +83,7 @@ update_player:	PROCEDURE
 	REM If down, and we're not at the bottom, go down:
 	IF cont1.down AND (NOT MOVEMENT_LOCK) THEN IF Y<9 THEN Y=Y+1
 	REM If left, and we're not at the left-most, go left:
-	IF cont1.left AND (NOT MOVEMENT_LOCK) THEN IF X > 0 THEN X=X-1
+	IF cont1.left AND (NOT MOVEMENT_LOCK) THEN IF X > 1 THEN X=X-1
 	REM If right, and we're not at the right-most, go right:
 	IF cont1.right AND (NOT MOVEMENT_LOCK) THEN IF X < 17 THEN X=X+1
 
@@ -98,8 +101,18 @@ update_bullets:	PROCEDURE
 	REM Generate a new line
 	' LINES(19) = RAND AND (RAND XOR LINES(16))
 	LINES(19) = RAND AND (NOT LINES(16))
-	REM Add 1 to the score
-	IF LIVES > 0 THEN #SCORE = #SCORE + 1
+	REM Adjust the score
+	IF LIVES > 0 THEN 
+		#SCORE = #SCORE + 1
+		' If we're at the point to update speed:
+		IF #SCORE % BULLET_SPEED_CHANGE_POINTS = 0 THEN
+			'change speed if we're not at max
+			IF BULLET_UPDATE_DELAY > ENDING_BULLET_UPDATE_DELAY THEN 
+				BULLET_UPDATE_DELAY = BULLET_UPDATE_DELAY-1
+			END IF
+			'change the bullet color too
+		END IF
+	END IF
 	REM Make our fake player position empty:
 	BITMASK=&10000000
 	FOR B=2 TO 9
