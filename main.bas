@@ -15,13 +15,14 @@ CONST STARTING_BULLET_UPDATE_DELAY=20
 	REM AKA: the fastest the game will go:
 CONST ENDING_BULLET_UPDATE_DELAY=4
 	REM How many points until delay changes
-CONST BULLET_SPEED_CHANGE_POINTS=20
+CONST BULLET_SPEED_CHANGE_POINTS=100
 	REM Current bullet update delay
 	REM No longer a constant
 BULLET_UPDATE_DELAY=STARTING_BULLET_UPDATE_DELAY 
 	REM Counter for the bullets.
 	REM Once it's above the update delay, switch
 BULLET_TICK=0
+
 
 
 	REM Set up state variables
