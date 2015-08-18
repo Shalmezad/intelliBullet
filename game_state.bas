@@ -81,6 +81,7 @@ kill_player:	PROCEDURE
 update_player:	PROCEDURE
 	REM Now the fun part....
 	OLD_Y = Y
+	OLD_X = X
 	REM If up, and we're not at the top, go up:
 	IF cont1.up AND (NOT MOVEMENT_LOCK) THEN IF Y>2 THEN Y=Y-1
 	REM If down, and we're not at the bottom, go down:
@@ -92,8 +93,13 @@ update_player:	PROCEDURE
 
 	REM Adjust the movement lock based on input:
 	MOVEMENT_LOCK = cont1.up OR cont1.down OR cont1.left OR cont1.right
-	IF NOT (Y = OLD_Y) THEN GOSUB check_collision
-	IF NOT (Y = OLD_Y) THEN GOSUB render_player_col
+	IF NOT (Y = OLD_Y AND X = OLD_X) THEN GOSUB check_collision
+	IF NOT (Y = OLD_Y AND X = OLD_X) THEN GOSUB render_player_col
+	'If our X changed, we need to rerender the old X position as well:
+	IF NOT (X = OLD_X) THEN
+		RENDER_LINE_PARAM_X = OLD_X
+		GOSUB render_line
+	END IF
 	END
 
 update_bullets:	PROCEDURE
@@ -168,7 +174,7 @@ render_bullets:	PROCEDURE
 	END
 
 render_score:	PROCEDURE
-	PRINT AT 5 COLOR 3,"Score  "
+	PRINT AT 5 COLOR 3,"Score"
   FOR A=0 TO 5
     #PLACE=1
     B=0

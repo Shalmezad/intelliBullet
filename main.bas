@@ -52,9 +52,9 @@ loop:	WAIT
 	END IF
 	'Game state
 	IF (CURRENT_STATE=GAME_STATE) THEN
-		IF (FRAME AND 2) AND LIVES > 0 THEN
-			GOSUB update_player
-		END IF
+		' IF (FRAME AND 2) AND LIVES > 0 THEN
+		GOSUB update_player
+		' END IF
 		BULLET_TICK = BULLET_TICK + 1
 		IF BULLET_TICK > BULLET_UPDATE_DELAY THEN
 			GOSUB update_bullets
