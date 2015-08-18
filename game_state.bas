@@ -25,7 +25,7 @@ game_state_init:	PROCEDURE
 	BULLET_UPDATE_DELAY=STARTING_BULLET_UPDATE_DELAY
 	REM Bullet color
 	REM What color the bullets will be. Changes whenever difficulty ramps up
-	BULLET_COLOR = 4
+	BULLET_COLOR = 5
 
 	REM Bullet lines:
 	REM So, the screen is 20x12
@@ -124,7 +124,7 @@ update_bullets:	PROCEDURE
 				BULLET_UPDATE_DELAY = BULLET_UPDATE_DELAY-1
 			END IF
 			'change the bullet color too
-			IF BULLET_COLOR = 4 THEN BULLET_COLOR = 2 ELSE IF BULLET_COLOR = 2 THEN BULLET_COLOR=4
+			IF BULLET_COLOR = 5 THEN BULLET_COLOR = 0 ELSE IF BULLET_COLOR = 0 THEN BULLET_COLOR=5
 		END IF
 	END IF
 	REM Make our fake player position empty:

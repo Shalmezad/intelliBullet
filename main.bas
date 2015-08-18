@@ -49,6 +49,9 @@ loop:	WAIT
 	'Pre game state
 	IF (CURRENT_STATE=PRE_GAME_STATE) THEN 
 		GOSUB game_state_init
+		'MODE 0,1,2,7,4
+		'MODE 0,17,2,7,4
+		MODE 0,4,2,7,4
 		CURRENT_STATE=GAME_STATE
 	END IF
 	'Game state
