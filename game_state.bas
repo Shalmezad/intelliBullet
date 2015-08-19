@@ -125,6 +125,8 @@ update_bullets:	PROCEDURE
 			END IF
 			'change the bullet color too
 			IF BULLET_COLOR = 5 THEN BULLET_COLOR = 0 ELSE IF BULLET_COLOR = 0 THEN BULLET_COLOR=5
+			'Print the level:
+			GOSUB render_level_change
 		END IF
 	END IF
 	REM Make our fake player position empty:
@@ -174,7 +176,7 @@ render_bullets:	PROCEDURE
 		GOSUB render_line
 	NEXT A
 
-	PRINT AT 19+20*FAKE_Y     COLOR 6, "<"
+	PRINT AT 19+20*FAKE_Y     COLOR 2, "<"
 	END
 
 render_score:	PROCEDURE
@@ -209,4 +211,26 @@ render_line: PROCEDURE
 render_player_col:	PROCEDURE
 	RENDER_LINE_PARAM_X = X
 	GOSUB render_line
+	END
+
+REM NOTE: THIS IS A BLOCKING CALL!
+REM Only call each level change
+render_level_change:	PROCEDURE
+	PRINT AT 80 COLOR BULLET_COLOR, "    LEVEL           "	
+	LEVEL = #SCORE/BULLET_SPEED_CHANGE_POINTS + 1
+  FOR A=0 TO 2
+    #PLACE=1
+    B=0
+    ' Had for B=0 TO A, but it always ran at least once. 
+    WHILE B< A
+      #PLACE = #PLACE * 10
+      B=B+1
+    WEND
+    ' So apparently, if you try printing a number, it prints based on a character chart. 
+    ' Hence the +16)*8+6. Makes more sense now.
+    PRINT AT 95-A COLOR BULLET_COLOR, (LEVEL/#PLACE%10+16)*8+6
+  NEXT A
+	FOR A=0 TO 200
+		WAIT
+	NEXT A
 	END
